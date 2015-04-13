@@ -1,3 +1,4 @@
+
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = factory(
@@ -46,29 +47,24 @@
     },
 
     componentDidMount: function () {
-      if (this.isMounted()) {
-        this.swipe = Swipe(this.getDOMNode(), this.props);
-      }
+        this.addSwipe();
     },
 
     componentDidUpdate: function () {
-      if (this.props.slideToIndex || this.props.slideToIndex === 0) {
-        this.swipe.slide(this.props.slideToIndex);
-      }
+        this.removeSwipe();
+        this.addSwipe();
     },
 
     componentWillUnmount: function () {
-      this.swipe.kill();
-      delete this.swipe;
+        this.removeSwipe();
     },
-
-    shouldComponentUpdate: function (nextProps) {
-      return (
-        (this.props.slideToIndex !== nextProps.slideToIndex) ||
-        (typeof this.props.shouldUpdate !== 'undefined') && this.props.shouldUpdate(nextProps)
-      );
+    removeSwipe: function() {
+        this.swipe.kill();
+        delete this.swipe;
     },
-
+    addSwipe: function() {
+        this.swipe = Swipe(this.getDOMNode(), this.props);
+    },
     render: function() {
       return React.createElement('div', React.__spread({}, this.props, {style: styles.container}),
         React.createElement('div', {style: styles.wrapper},
